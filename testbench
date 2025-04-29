@@ -1,0 +1,48 @@
+`timescale 1ns / 1ps
+module tb_arithmetic_operations;
+
+    // Inputs
+    reg [3:0] A, B;              // 4-bit operands
+    reg [1:0] operation;         // Operation selector
+
+    // Outputs
+    wire [7:0] result;           // Output for add, sub, mul, quotient (for div)
+
+    // Instantiate the Arithmetic Operations Module
+    arithmetic_operations uut (
+        .A(A),
+        .B(B),
+        .operation(operation),
+        .result(result)
+    );
+
+    initial begin
+        $monitor("Time=%0t | A=%b (%0d), B=%b (%0d), Op=%b | Result=%0d", 
+                  $time, A, A, B, B, operation, result);
+
+        // Operation Codes:
+        // 00 = Addition
+        // 01 = Subtraction
+        // 10 = Multiplication
+        // 11 = Division (Quotient only)
+
+        // Test Case 1: 14 + 1 = 15
+        A = 4'b1110; B = 4'b0001; operation = 2'b00;
+        #10;
+
+        // Test Case 2: 15 - 8 = 7
+        A = 4'b1111; B = 4'b1000; operation = 2'b01;
+        #10;
+
+        // Test Case 3: 12 * 14 = 168
+        A = 4'b1100; B = 4'b1110; operation = 2'b10;
+        #10;
+
+        // Test Case 4: 15 / 5 = 3 (Quotient only)
+        A = 4'b1111; B = 4'b0101; operation = 2'b11;
+        #10;
+
+        $stop;
+    end
+
+endmodule
