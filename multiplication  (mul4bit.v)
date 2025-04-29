@@ -1,0 +1,33 @@
+`timescale 1ns / 1ps
+module mult4bit(
+    input [3:0] a, 
+    input [3:0] b, 
+    output [7:0] p
+);
+
+    wire [3:0] m0, m1, m2, m3;
+    wire [4:0] m1_shifted;
+    wire [5:0] m2_shifted;
+    wire [6:0] m3_shifted;
+    wire [7:0] s1, s2, s3;
+
+    // Generate partial products
+    assign m0 = {4{a[0]}} & b;
+    assign m1 = {4{a[1]}} & b;
+    assign m2 = {4{a[2]}} & b;
+    assign m3 = {4{a[3]}} & b;
+
+    // Shift partial products
+    assign m1_shifted = m1 << 1;
+    assign m2_shifted = m2 << 2;
+    assign m3_shifted = m3 << 3;
+
+    // Summation of partial products
+    assign s1 = m0 + m1_shifted;
+    assign s2 = s1 + m2_shifted;
+    assign s3 = s2 + m3_shifted;
+
+    // Final product
+    assign p = s3;
+
+endmodule
